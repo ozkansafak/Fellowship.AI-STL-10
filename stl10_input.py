@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import sys
 import os, sys, tarfile
 import numpy as np

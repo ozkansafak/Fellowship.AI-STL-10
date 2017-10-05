@@ -84,23 +84,31 @@ class Callback_Func(Callback):
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-def get_cnames_fidx():
+def get_cnames_fidx(y_onehot, n_split=5):
     # Returns
     # fidx: fold indices on the training set (0,...4999)
     # cnames: class names (10 classes)
     
     with open('data/class_names.txt','r') as f:
         cnames = f.read()
-    cnames = cnames.split('\n')
+    cnames = cnames.split('\n')[:-1]
 
-    with open('data/fold_indices.txt','r') as f:
-        fidx = f.read()
-    fidx = [row[:-1].split(' ') for row in fidx.split('\n')][:-1]
+    fidx = custom_KFold(y_onehot, n_split=n_split)
+    
+    # with open('data/fold_indices.txt','r') as f:
+    #     fidx = f.read()
+    # fidx = [row[:-1].split(' ') for row in fidx.split('\n')][:-1]
 
-    for i in range(len(fidx)):
-        for j in range(len(fidx[i])):
-            fidx[i][j] = int(fidx[i][j])
-        
+    # for i in range(len(fidx)):
+    #     for j in range(len(fidx[i])):
+    #         fidx[i][j] = int(fidx[i][j])
+    # fidx = np.asarray(fidx)
+    
+    cnames = np.asarray(cnames)
+    print('Class names retrieved in cnames')
+    print('K-Fold indices generated, n_split = %i'%(n_split))
+    print('Fold width = %i'%(fidx.shape[1]))
+    print('Number of data points for each class = %i'%(fidx.shape[1]/n_split))
     return cnames, fidx
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -167,9 +175,33 @@ def train_model(model_top,
 
     return model_top, callback_inst
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
+def custom_KFold(y_onehot, n_split=5):
+    y = np.argmax(y_onehot, axis=1)
+    # input y: numpy array of class ID's
+    
+    idx = []
+    for cls in set(y):
+        # idx[cls] is the indices to class no cls
+        idx.append(np.where(y==cls)[0])
+    idx = np.asarray(idx)
+    for i in range(len(idx)):
+        np.random.shuffle(idx[i])
 
-
+    fidx = []
+    fold_width = int(idx.shape[1]/n_split)
+    for k in range(n_split):
+        out = []
+        for i in range(len(idx)):
+            out.append(idx[i,k*fold_width : (k+1)*fold_width])
+        out = np.concatenate(out)
+        np.random.shuffle(out)
+        fidx.append(out)
+    fidx = np.array(fidx)
+    np.random.shuffle(fidx)
+    return fidx
 
 
 
