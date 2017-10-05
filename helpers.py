@@ -135,7 +135,6 @@ def get_model_top():
     # model_top.add(Dense(1000, activation='relu')) 
     model_top.add(Dense(1000, activation='softmax')) 
 
-    model_top.summary() 
 
     model_top.compile(optimizer='adam',
               loss='categorical_crossentropy',
