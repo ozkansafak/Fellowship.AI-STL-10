@@ -124,7 +124,7 @@ def construct_model():
     model_top = Sequential() 
     model_top.add(GlobalAveragePooling2D(data_format='channels_last', input_shape=(7, 7, 512))) 
     # model_top.add(Dense(1000, activation='relu')) 
-    # model_top.add(Dense(1000, activation='relu')) 
+    model_top.add(Dense(1000, activation='relu')) 
     model_top.add(Dense(1000, activation='softmax')) 
 
 
