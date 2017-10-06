@@ -48,7 +48,7 @@ class Callback_Func(Callback):
         plt.xlabel('epochs')
         plt.grid('on')
         plt.title('loss')
-        x_plot = range(1, len(self.loss_train)+1)
+        x_plot = range(0, len(self.loss_train))
         plt.xlim((1,max(max(x_plot),2)))
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.plot(x_plot, self.loss_test, 'r--^', alpha=.7, label="validation")
@@ -92,19 +92,10 @@ def get_cnames_fidx(y_onehot, n_split=5):
     with open('data/class_names.txt','r') as f:
         cnames = f.read()
     cnames = cnames.split('\n')[:-1]
+    cnames = np.asarray(cnames)
 
     fidx = custom_KFold(y_onehot, n_split=n_split)
     
-    # with open('data/fold_indices.txt','r') as f:
-    #     fidx = f.read()
-    # fidx = [row[:-1].split(' ') for row in fidx.split('\n')][:-1]
-
-    # for i in range(len(fidx)):
-    #     for j in range(len(fidx[i])):
-    #         fidx[i][j] = int(fidx[i][j])
-    # fidx = np.asarray(fidx)
-    
-    cnames = np.asarray(cnames)
     print('Class names retrieved in cnames')
     print('K-Fold indices generated, n_split = %i'%(n_split))
     print('Fold width = %i'%(fidx.shape[1]))
@@ -121,17 +112,18 @@ def npy_saver(arr, arr_name, sno, verbose=True):
             print('Save: %s_%02d.npy' % (arr_name, sno))
     return
 
-from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
-from keras.layers import Dropout, Flatten, Dense
-from keras.models import Sequential
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-def get_model_top():
+def construct_model():
+    from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
+    from keras.layers import Dropout, Flatten, Dense
+    from keras.models import Sequential
+
     model_top = Sequential() 
     model_top.add(GlobalAveragePooling2D(data_format='channels_last', input_shape=(7, 7, 512))) 
-    # model_top.add(Flatten())
+    # model_top.add(Dense(1000, activation='relu')) 
     # model_top.add(Dense(1000, activation='relu')) 
     model_top.add(Dense(1000, activation='softmax')) 
 
