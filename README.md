@@ -16,6 +16,9 @@
 
 > * After `Unlabeled_X.bin` was read into array and resized to `(224,224,3)`. `X_unlabeled_features`, the bottleneck features were computed via forward pass on `model_bottom`. Then `Unlabeled_X.bin` was deleted to create space to write `X_unlabeled_features` array (9.5 GB) to the disk.  
 
+> * The python code is run on an AWS p2.xlarge instance NVIDIA Tesla K80 Accelerators, that provides 12 GiB of GPU Memory.
+
+
 ## RESULTS
 
 #### Supervised Results:
