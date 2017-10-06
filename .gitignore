@@ -2,3 +2,4 @@
 *.*
 !main.ipynb
 !*.py
+!*.md
