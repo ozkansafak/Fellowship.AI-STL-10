@@ -1,5 +1,5 @@
 .DS_Store
 *.*
-!main.ipynb
+!*.ipynb
 !*.py
 !*.md
