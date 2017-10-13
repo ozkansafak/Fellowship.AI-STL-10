@@ -69,8 +69,8 @@ class Callback_Func(Callback):
     def on_epoch_end(self, epoch, logs={}):
         X_train, y_train = self.train_data
         X_test, y_test = self.test_data
-        _loss_train, _ = self.model.evaluate(X_train, y_train, verbose=0)
-        _loss_test, _acc = self.model.evaluate(X_test, y_test, verbose=0)
+        _loss_train, _ = self.model.evaluate(X_train, y_train, batch_size=1024, verbose=0)
+        _loss_test, _acc = self.model.evaluate(X_test, y_test, batch_size=1024, verbose=0)
         self.loss_train.append(_loss_train)
         self.loss_test.append(_loss_test)
         self.acc.append(_acc)
