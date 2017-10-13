@@ -48,7 +48,7 @@ class Callback_Func(Callback):
         plt.xlabel('epochs')
         plt.grid('on')
         plt.title('loss')
-        x_plot = range(0, len(self.loss_train))
+        x_plot = range(1, len(self.loss_train)+1)
         plt.xlim((1,max(max(x_plot),2)))
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
         ax.plot(x_plot, self.loss_test, 'r--^', alpha=.7, label="validation")
